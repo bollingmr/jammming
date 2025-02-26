@@ -1,0 +1,40 @@
+.track {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.trackIcon img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.trackInformation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.trackInformation h3,
+.trackInformation p {
+  margin: 2px 0; /* Adjust the margin to reduce spacing */
+}
+
+.trackAction {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #32118d;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.trackAction:hover {
+  background-color: #4a24b3;
+}
