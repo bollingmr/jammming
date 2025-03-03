@@ -7,7 +7,7 @@
   box-sizing: border-box;
 }
 
-.trackIcon img {
+.albumArt img {
   width: 50px;
   height: 50px;
   margin-right: 10px;
@@ -18,23 +18,30 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  text-align: left;
 }
 
-.trackInformation h3,
+.trackInformation h3 {
+  margin: 2px 0;
+  font-size: 1rem;
+}
+
 .trackInformation p {
-  margin: 2px 0; /* Adjust the margin to reduce spacing */
+  margin: 2px 0;
+  font-size: 0.8rem;
 }
 
-.trackAction {
+.trackButton {
+  font-size: 1rem;
   margin-left: 10px;
   padding: 5px 10px;
   border: none;
-  background-color: #32118d;
+  background-color: #332850;
   color: white;
-  border-radius: 5px;
+  border-radius: 15px;
   cursor: pointer;
 }
 
-.trackAction:hover {
-  background-color: #4a24b3;
+.trackButton:hover {
+  background-color: #32118d;
 }

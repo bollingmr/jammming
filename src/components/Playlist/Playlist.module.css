@@ -9,7 +9,18 @@
   padding: 10px;
 }
 
-.playlist button {
+.playlist input {
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  background: transparent;
+  text-align: center;
+  font-family: Lato, Tahoma, Geneva, Verdana, sans-serif;
+  color: rgb(231, 231, 231);
+}
+
+.playlist .save {
   padding: 12px 20px;
   border: none;
   background-color: #32118d;
@@ -19,9 +30,9 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
-  margin: 20px;
+  margin: 30px;
 }
 
-.playlist button:hover {
+.playlist .save:hover {
   background-color: #4a24b3;
 }

@@ -1,54 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import SearchBar from "./components/SearchBar/SearchBar";
 import SearchResults from "./components/SearchResults/SearchResults";
 import Playlist from "./components/Playlist/Playlist";
+import Spotify from "./services/Spotify";
 
 function App() {
-  const [tracks, setTracks] = useState([
-    {
-      id: 1,
-      name: "Tiny Dancer",
-      artist: "Elton John",
-      album: "Madman Across The Water",
-    },
-    {
-      id: 2,
-      name: "Large Dancer",
-      artist: "Tim McGraw",
-      album: "Love Story",
-    },
-    {
-      id: 3,
-      name: "More Dancers",
-      artist: "Rockabye Baby!",
-      album: "Lullaby Renditions of Elton John",
-    },
-    {
-      id: 4,
-      name: "Small Dancer",
-      artist: "Ben Folds",
-      album: "Ben Folds Live",
-    },
-    {
-      id: 5,
-      name: "Great Dancer",
-      artist: "The White Raven",
-      album: "Tiny Dancer",
-    },
-    {
-      id: 6,
-      name: "Poor Dancer",
-      artist: "Elton John",
-      album: "Madman Across The Water",
-    },
-    {
-      id: 7,
-      name: "Rich Dancer",
-      artist: "Tim McGraw",
-      album: "Love Story",
-    },
-  ]);
+  const [tracks, setTracks] = useState([]);
+  const [playlistName, setPlaylistName] = useState("My Playlist");
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+
+  useEffect(() => {
+    Spotify.getAccessToken();
+  }, []);
+
+  const searchSpotify = (term) => {
+    Spotify.search(term).then((searchResults) => {
+      setTracks(searchResults);
+    });
+  };
+
+  const onAdd = (track) => {
+    if (!playlistTracks.find((playlistTrack) => playlistTrack.id === track.id)) {
+      setPlaylistTracks([...playlistTracks, track]);
+    }
+  };
+
+  const onRemove = (track) => {
+    setPlaylistTracks(playlistTracks.filter((playlistTrack) => playlistTrack.id !== track.id));
+  };
+
+  const savePlaylist = () => {
+    const trackURIs = playlistTracks.map((track) => track.uri);
+
+    // Save playlist to Spotify
+    console.log("Saving playlist with URIs: ", trackURIs);
+    Spotify.savePlaylist(playlistName, trackURIs);
+
+    setPlaylistName("New Playlist");
+    setPlaylistTracks([]);
+  };
 
   return (
     <div className="App">
@@ -59,17 +50,24 @@ function App() {
       </header>
       <main>
         <section className="search-container">
-          <SearchBar />
+          <SearchBar onSearch={searchSpotify} />
         </section>
 
         <section className="results-and-playlist">
           <div className="search-results">
-            {/* Left side */}
-            <SearchResults tracks={tracks} />
+            <SearchResults
+              tracks={tracks}
+              onAdd={onAdd}
+            />
           </div>
           <div className="playlist">
-            {/* Right side */}
-            <Playlist />
+            <Playlist
+              playlistName={playlistName}
+              setPlaylistName={setPlaylistName}
+              playlistTracks={playlistTracks}
+              onRemove={onRemove}
+              savePlaylist={savePlaylist}
+            />
           </div>
         </section>
       </main>
