@@ -1,5 +1,5 @@
 const clientId = "78ec113d1816441d85356d15687618c0"; // Spotify Client ID
-const redirectUri = "https://rad-queijadas-b789cf.netlify.app/"; // On Spotify Dashboard
+const redirectUri = "https://bollingmr-jammming.netlify.app/"; // On Spotify Dashboard
 let accessToken;
 
 const Spotify = {
