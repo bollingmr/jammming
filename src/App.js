@@ -7,7 +7,7 @@ import Spotify from "./services/Spotify";
 
 function App() {
   const [tracks, setTracks] = useState([]);
-  const [playlistName, setPlaylistName] = useState("My Playlist");
+  const [playlistName, setPlaylistName] = useState("Enter Playlist Name...");
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
   useEffect(() => {
@@ -16,29 +16,31 @@ function App() {
 
   const searchSpotify = (term) => {
     Spotify.search(term).then((searchResults) => {
-      setTracks(searchResults);
+      const filteredResults = searchResults.filter(
+        (track) => !playlistTracks.find((playlistTrack) => playlistTrack.id === track.id)
+      );
+      setTracks(filteredResults);
     });
   };
 
   const onAdd = (track) => {
     if (!playlistTracks.find((playlistTrack) => playlistTrack.id === track.id)) {
       setPlaylistTracks([...playlistTracks, track]);
+      setTracks(tracks.filter((searchTrack) => searchTrack.id !== track.id));
     }
   };
 
   const onRemove = (track) => {
     setPlaylistTracks(playlistTracks.filter((playlistTrack) => playlistTrack.id !== track.id));
+    setTracks([...tracks, track]);
   };
 
   const savePlaylist = () => {
     const trackURIs = playlistTracks.map((track) => track.uri);
-
-    // Save playlist to Spotify
-    console.log("Saving playlist with URIs: ", trackURIs);
-    Spotify.savePlaylist(playlistName, trackURIs);
-
-    setPlaylistName("New Playlist");
-    setPlaylistTracks([]);
+    Spotify.savePlaylist(playlistName, trackURIs).then(() => {
+      setPlaylistName("New Playlist");
+      setPlaylistTracks([]);
+    });
   };
 
   return (

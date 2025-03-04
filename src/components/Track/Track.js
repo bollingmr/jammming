@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Track.module.css";
 
 function Track({ track, onAdd, onRemove, showAddButton }) {
@@ -25,7 +25,7 @@ function Track({ track, onAdd, onRemove, showAddButton }) {
           className={styles.trackButton}
           onClick={() => onAdd(track)}
         >
-          +
+          &#x2795;
         </button>
       )}
 
@@ -35,7 +35,7 @@ function Track({ track, onAdd, onRemove, showAddButton }) {
           className={styles.trackButton}
           onClick={() => onRemove(track)}
         >
-          -
+          &#x2796;
         </button>
       )}
     </div>
