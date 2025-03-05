@@ -6,7 +6,6 @@
   background-color: rgba(12, 9, 41, 0.8);
   border-radius: 4px;
   width: 100%;
-  max-width: 600px;
   padding: 10px;
   margin: auto;
 }
@@ -20,8 +19,7 @@
   text-align: center;
   font-family: Lato, Tahoma, Geneva, Verdana, sans-serif;
   color: rgb(231, 231, 231);
-  width: 90%;
-  max-width: 100%;
+  width: 100%;
   box-sizing: border-box;
   overflow: hidden;
 }
