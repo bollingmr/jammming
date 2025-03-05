@@ -27,10 +27,11 @@ const Spotify = {
 
     // Redirect user to Spotify authorization page if no token is found
     const scopes = ["playlist-modify-public", "playlist-modify-private"];
-    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}
-      &redirect_uri=${encodeURIComponent(redirectUri)}
-      &scope=${encodeURIComponent(scopes.join(" "))}
-      &response_type=token&show_dialog=true`;
+    const authUrl =
+      `https://accounts.spotify.com/authorize?client_id=${clientId}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&scope=${encodeURIComponent(scopes.join(" "))}` +
+      `&response_type=token&show_dialog=true`;
 
     window.location = authUrl;
   },
