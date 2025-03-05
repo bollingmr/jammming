@@ -35,6 +35,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
+  padding: 5px;
 }
 
 .searchIcon {
@@ -44,7 +45,7 @@
   transition: all 0.1s ease-in-out;
 }
 
-.searchButton:hover .searchIcon {
+.searchButton:hover {
   opacity: 1;
   background-color: #32118d;
   color: white;
