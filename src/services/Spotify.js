@@ -1,105 +1,104 @@
 const clientId = "78ec113d1816441d85356d15687618c0"; // Spotify Client ID
-const redirectUri = "https://bollingmr-jammming.netlify.app/"; // On Spotify Dashboard
+const redirectUri = "https://bollingmr-jammming.netlify.app/"; // Redirect URI from Spotify Dashboard
 let accessToken;
 
 const Spotify = {
+  /**
+   * Retrieves the access token from URL or requests authorization if not available.
+   */
   getAccessToken() {
-    if (accessToken) {
-      return accessToken;
-    }
+    if (accessToken) return accessToken;
 
-    // Check if the access token is in the URL
+    // Check if access token is present in the URL
     const tokenMatch = window.location.href.match(/access_token=([^&]*)/);
     const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
+
     if (tokenMatch && expiresInMatch) {
       accessToken = tokenMatch[1];
       const expiresIn = Number(expiresInMatch[1]);
 
-      // Clear the token after it expires
+      // Clear the token after expiration
       window.setTimeout(() => (accessToken = ""), expiresIn * 1000);
-      // Remove the token from the URL for security
+
+      // Remove access token from URL for security
       window.history.pushState("Access Token", null, "/");
       return accessToken;
-    } else {
-      // Redirect to Spotify's authorization page
-      const scopes = ["playlist-modify-public", "playlist-modify-private"];
-      const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
-        redirectUri
-      )}&scope=${encodeURIComponent(scopes.join(" "))}&response_type=token&show_dialog=true`;
-      window.location = authUrl;
     }
+
+    // Redirect user to Spotify authorization page if no token is found
+    const scopes = ["playlist-modify-public", "playlist-modify-private"];
+    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}
+      &redirect_uri=${encodeURIComponent(redirectUri)}
+      &scope=${encodeURIComponent(scopes.join(" "))}
+      &response_type=token&show_dialog=true`;
+
+    window.location = authUrl;
   },
 
-  search(term) {
-    const token = Spotify.getAccessToken(); // Ensure we have a token
+  /**
+   * Searches for tracks on Spotify by a given search term.
+   * @param {string} term - The search query.
+   * @returns {Promise<Array>} - A promise resolving to an array of track objects.
+   */
+  async search(term) {
+    const token = this.getAccessToken();
 
-    return fetch(`https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(term)}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((jsonResponse) => {
-        if (!jsonResponse.tracks) {
-          return [];
-        }
-        // Map the returned tracks to a format that matches your app
-        return jsonResponse.tracks.items.map((track) => ({
-          id: track.id,
-          name: track.name,
-          artist: track.artists.map((artist) => artist.name).join(", "),
-          album: track.album.name,
-          uri: track.uri,
-          // We'll store the album image URL separately so we can display it
-          albumArt:
-            track.album.images && track.album.images.length ? track.album.images[0].url : null,
-        }));
-      });
+    const response = await fetch(
+      `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(term)}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    const jsonResponse = await response.json();
+    if (!jsonResponse.tracks) return [];
+
+    // Format and return relevant track data
+    return jsonResponse.tracks.items.map((track) => ({
+      id: track.id,
+      name: track.name,
+      artist: track.artists.map((artist) => artist.name).join(", "),
+      album: track.album.name,
+      uri: track.uri,
+      albumArt: track.album.images.length ? track.album.images[0].url : null,
+    }));
   },
 
-  // A placeholder for saving the playlist (you can expand this to call the Spotify API)
+  /**
+   * Saves a new playlist to the user's Spotify account.
+   * @param {string} playlistName - The name of the playlist.
+   * @param {Array} trackURIs - The URIs of the tracks to add.
+   */
   async savePlaylist(playlistName, trackURIs) {
-    const token = Spotify.getAccessToken();
     if (!playlistName || !trackURIs.length) return;
-
+    const token = this.getAccessToken();
     const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
-    let userId;
 
-    // **Step 1: Get the Current User’s Spotify ID**
     try {
+      // Step 1: Get the current user's Spotify ID
       const userResponse = await fetch("https://api.spotify.com/v1/me", { headers });
       const userData = await userResponse.json();
-      userId = userData.id;
-    } catch (error) {
-      console.error("Error fetching user ID:", error);
-      return;
-    }
+      const userId = userData.id;
 
-    // **Step 2: Create a New Playlist**
-    let playlistId;
-    try {
+      // Step 2: Create a new playlist
       const playlistResponse = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
         method: "POST",
         headers,
         body: JSON.stringify({ name: playlistName, public: false }),
       });
       const playlistData = await playlistResponse.json();
-      playlistId = playlistData.id;
-    } catch (error) {
-      console.error("Error creating playlist:", error);
-      return;
-    }
+      const playlistId = playlistData.id;
 
-    // **Step 3: Add Tracks to the Playlist**
-    try {
+      // Step 3: Add tracks to the newly created playlist
       await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
         method: "POST",
         headers,
         body: JSON.stringify({ uris: trackURIs }),
       });
+
       console.log(`Playlist "${playlistName}" saved successfully.`);
     } catch (error) {
-      console.error("Error adding tracks to playlist:", error);
+      console.error("Error saving playlist:", error);
     }
   },
 };
