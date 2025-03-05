@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styles from "./SearchBar.module.css";
+import searchIcon from "../../search.svg";
 
-function SearchBar({ onSearch }) {
+const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleTermChange = (event) => {
@@ -21,14 +22,24 @@ function SearchBar({ onSearch }) {
   return (
     <div className={styles.searchBar}>
       <input
+        className={styles.searchInput}
         type="text"
-        placeholder="Search for a song or artist..."
+        placeholder="Search for a song..."
         onChange={handleTermChange}
         onKeyDown={handleKeyDown}
       />
-      <button onClick={handleSearch}>Search</button>
+      <button
+        className={styles.searchButton}
+        onClick={handleSearch}
+      >
+        <img
+          src={searchIcon}
+          alt="Search"
+          className={styles.searchIcon}
+        />
+      </button>
     </div>
   );
-}
+};
 
 export default SearchBar;
