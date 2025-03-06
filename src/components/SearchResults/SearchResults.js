@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import styles from "./SearchResults.module.css";
+import SearchBar from "../SearchBar/SearchBar";
 import Tracklist from "../Tracklist/Tracklist";
 
-function SearchResults({ tracks, onAdd }) {
+function SearchResults({ tracks, onAdd, onSearch }) {
   const [showMore, setShowMore] = useState(false);
   const visibleTracks = showMore ? tracks : tracks.slice(0, 5);
   return (
     <div className={styles.searchResults}>
-      <h2>Search Results</h2>
+      <SearchBar onSearch={onSearch} />
       <Tracklist
         tracks={visibleTracks}
         onAdd={onAdd}

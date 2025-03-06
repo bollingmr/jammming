@@ -51,15 +51,12 @@ function App() {
         </h1>
       </header>
       <main>
-        <section className="search-container">
-          <SearchBar onSearch={searchSpotify} />
-        </section>
-
         <section className="results-and-playlist">
           <div className="search-results">
             <SearchResults
               tracks={tracks}
               onAdd={onAdd}
+              onSearch={searchSpotify}
             />
           </div>
           <div className="playlist">

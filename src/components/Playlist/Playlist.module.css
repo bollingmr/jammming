@@ -29,6 +29,7 @@
 
 .playlist .save {
   padding: 12px 20px;
+  width: 80%;
   border: none;
   background-color: #32118d;
   color: rgb(231, 231, 231);
