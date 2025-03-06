@@ -1,5 +1,9 @@
 const clientId = "78ec113d1816441d85356d15687618c0"; // Spotify Client ID
-const redirectUri = "https://bollingmr-jammming.netlify.app/"; // Redirect URI from Spotify Dashboard
+const redirectUri =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3000/"
+    : "https://bollingmr-jammming.netlify.app/"; // Production URL
+// Redirect URIs from Spotify Dashboard
 let accessToken;
 
 const Spotify = {
