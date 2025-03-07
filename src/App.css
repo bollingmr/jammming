@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-image: url("../public/background.png");
+  background-image: url("../public/background.svg");
   background-size: cover;
   background-position: center;
   min-height: 100vh;
