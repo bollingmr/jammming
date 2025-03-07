@@ -9,6 +9,9 @@ function SearchResults({ tracks, onAdd, onSearch }) {
   return (
     <div className={styles.searchResults}>
       <SearchBar onSearch={onSearch} />
+      {tracks.length === 0 && (
+        <div className={styles.noResults}>Search results will appear here</div>
+      )}
       <Tracklist
         tracks={visibleTracks}
         onAdd={onAdd}

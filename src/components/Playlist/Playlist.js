@@ -23,16 +23,15 @@ function Playlist({ playlistName, setPlaylistName, playlistTracks, onRemove, sav
 
   return (
     <div className={styles.playlist}>
-      <h2>
-        <input
-          type="text"
-          value={playlistName}
-          onChange={handleNameChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          className={inputClass}
-        />
-      </h2>
+      <input
+        type="text"
+        value={playlistName}
+        onChange={handleNameChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        className={inputClass}
+      />
+
       <Tracklist
         tracks={playlistTracks}
         showAddButton={false}
